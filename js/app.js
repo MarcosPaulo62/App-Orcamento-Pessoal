@@ -31,6 +31,7 @@ class Bd {
             let despesa = JSON.parse(localStorage.getItem(i))
 
             if(despesa != null){
+                despesa.id = i
                 despesas.push(despesa)
             }
         }
@@ -73,6 +74,10 @@ class Bd {
         }
 
         return despesasFiltradas
+    }
+
+    remover(id) {
+        localStorage.removeItem(id)
     }
 }
 
@@ -193,5 +198,24 @@ function preencherTabela(despesas) {
         linha.insertCell(1).innerHTML = x.tipo
         linha.insertCell(2).innerHTML = x.descricao
         linha.insertCell(3).innerHTML = x.valor
+        
+        //criar botão de exclusão
+        let btn = document.createElement("button")
+        btn.className = 'btn btn-danger'
+        btn.innerHTML = '<i class="fas fa-times"></i>'
+        btn.id = `id_despesa_${x.id}` // passando id da despesa como id do botão
+        btn.onclick = function() {
+            // formatando o id
+            let id = this.id.replace('id_despesa_', '')
+            
+            // Removendo item do local storage
+            bd.remover(id)
+
+            // Recarregando a página para atualizar a lista
+            window.location.reload()
+        }
+        linha.insertCell(4).append(btn)
+
+
     })
 }
