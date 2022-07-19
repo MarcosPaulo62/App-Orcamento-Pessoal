@@ -42,6 +42,26 @@ function cadastrarDespesa() {
         valor: valor.value
     }
 
-    bd.gravar(despesa)
+    let gravar = true
+    let dados = [ano, mes, dia, tipo, descricao, valor]
+
+    // Verificando se todos os campos estão preenchidos
+    for(let c in dados) { 
+        if(dados[c].value == '' || dados[c].value == null || dados[c].value == undefined){
+            gravar = false
+        }
+    } 
+
+    if(gravar) {
+        bd.gravar(despesa)
+        
+        // Dialog de sucesso
+        $('#sucessoGravacao').modal('show')
+    } else {
+        // Dialog de erro
+        $('#erroGravacao').modal('show')
+    }
+
+    
 }
  
