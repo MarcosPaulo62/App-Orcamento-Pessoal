@@ -37,6 +37,43 @@ class Bd {
 
         return despesas
     }
+
+    pesquisar(despesa) {
+
+        let despesasFiltradas = this.recuperarTodosRegistros()
+
+        //ano
+        if(despesa.ano != ''){
+            despesasFiltradas = despesasFiltradas.filter(d => d.ano == despesa.ano)
+        }
+
+        //mes
+        if(despesa.mes != ''){
+            despesasFiltradas = despesasFiltradas.filter(d => d.mes == despesa.mes)
+        }
+ 
+        //dia
+        if(despesa.dia != ''){
+            despesasFiltradas = despesasFiltradas.filter(d => d.dia == despesa.dia)
+        }
+
+        //tipo
+        if(despesa.tipo != ''){
+            despesasFiltradas = despesasFiltradas.filter(d => d.tipo == despesa.tipo)
+        }
+
+        //descrição
+        if(despesa.descricao != ''){
+            despesasFiltradas = despesasFiltradas.filter(d => d.descricao == despesa.descricao)
+        }
+
+        //valor
+        if(despesa.valor != ''){
+            despesasFiltradas = despesasFiltradas.filter(d => parseFloat(d.valor) == parseFloat(despesa.valor))
+        }
+
+        return despesasFiltradas
+    }
 }
 
 let bd = new Bd()
@@ -101,18 +138,32 @@ function cadastrarDespesa() {
 function carregaListaDespesas() {
     let despesas = bd.recuperarTodosRegistros() // Array das despesas
 
+    preencherTabela(despesas)
+}
+ 
+function pesquisarDespesa() {
+    let ano = document.getElementById('ano').value
+    let mes = document.getElementById('mes').value
+    let dia = document.getElementById('dia').value
+    let tipo = document.getElementById('tipo').value
+    let descricao = document.getElementById('descricao').value
+    let valor = document.getElementById('valor').value
+
+    let despesa = {
+        ano, mes, dia, tipo, descricao, valor
+    }
+
+    // Recuperando despesas filtradas
+    let despesasFiltradas = bd.pesquisar(despesa)
+
+    preencherTabela(despesasFiltradas)
+}
+
+function preencherTabela(despesas) {
     let listaDespesas = document.getElementById('listaDespesas') // body da tabela
+    listaDespesas.innerHTML = '' // Limpando tabela
 
-    /*
-    <tr>
-        <td>15/03/2018</td>
-        <td>Alimentação</td>
-        <td>Compras do mês</td>
-        <td>500.00</td>
-    </tr>
-    */
-
-    // Percorrendo despesas
+    // Percorrendo despesas filtradas
     despesas.forEach( x => {
 
         // criando a linha (tr)
@@ -144,4 +195,3 @@ function carregaListaDespesas() {
         linha.insertCell(3).innerHTML = x.valor
     })
 }
- 
